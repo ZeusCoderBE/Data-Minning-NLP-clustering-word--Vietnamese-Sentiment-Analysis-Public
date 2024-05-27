@@ -70,21 +70,102 @@ def sentiment_analysis(username):
 
                 
 # Streamlit app for login page
+# def login_page():
+#     st.title("Login Page")
+#     username = st.text_input("Username:", key="username_input")
+#     password = st.text_input("Password:", type="password", key="password_input")
+#     user = User(username, password)
+#     userDao = UserDao()
+#     if st.button("Login"):
+#         login_success = userDao.check_login(user)
+#         if login_success == 1:
+#             st.session_state.page = "sentiment_analysis"
+#             st.session_state.username = username
+#         else:
+#             st.error("Invalid username or password.")
+#     else:
+#         st.info("Please login to access the sentiment analysis page.")
+
 def login_page():
-    st.title("Login Page")
-    username = st.text_input("Username:", key="username_input")
-    password = st.text_input("Password:", type="password", key="password_input")
+    # CSS for styling
+    st.markdown(
+        """
+        <style>
+        .login-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 1em;
+            color: #ffffff;
+            background-color: #4CAF50;
+            font-weight: bold;
+            padding: 0.5em;
+            border-radius: 10px;
+        }
+        .login-input {
+            margin-bottom: 1.5em;
+        }
+        .login-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5em;
+            margin-bottom: 1.5em;
+        }
+        .login-button input {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1em;
+            padding: 0.5em 2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-button input:hover {
+            background-color: #45a049;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Layout for the login page
+
+    st.markdown('<div class="login-title">Login Page</div>', unsafe_allow_html=True)
+
+    # Input fields
+    username = st.text_input("Username:", key="username_input", placeholder="Enter your username", help="Your unique username", label_visibility="visible")
+    password = st.text_input("Password:", type="password", key="password_input", placeholder="Enter your password", help="Your password", label_visibility="visible")
+
+    # Create user and user DAO
     user = User(username, password)
     userDao = UserDao()
-    if st.button("Login"):
+
+    # Custom login button using HTML
+    login_button_clicked = st.markdown(
+        """
+        <div class="login-button">
+            <form action="#" method="POST">
+                <input type="submit" name="login_button" value="Login">
+            </form>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+
+    if st.session_state.get('login_button', False):
         login_success = userDao.check_login(user)
         if login_success == 1:
             st.session_state.page = "sentiment_analysis"
             st.session_state.username = username
+            st.success("Login successful!")
         else:
             st.error("Invalid username or password.")
     else:
         st.info("Please login to access the sentiment analysis page.")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+
 
 # Run the Streamlit app
 if __name__ == "__main__":
